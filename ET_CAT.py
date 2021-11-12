@@ -6,6 +6,9 @@ driver.get(url)
 
 xpath = "//table[@class='prettytable']//dd/a"
 
-
-wordList = driver.find_elements_by_xpath(xpath)
-print(wordList)
+# find_elements_by_xpath 함수 ->  조건에 맞는 태그(요소)를 모두 찾아 리스트에 저장
+wordList_1 = driver.find_elements_by_xpath(xpath) 
+wordList_2 = [] # wordList_1의 요소들을 텍스트로 변환한 뒤 저장할 빈 리스트 생성
+for w in wordList_1:
+    word = w.text # wordList_1 의 요소를 변환
+    print(word) # debug :: 텍스트 형태 변환 확인 용도 

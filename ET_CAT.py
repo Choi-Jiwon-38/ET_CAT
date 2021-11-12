@@ -16,4 +16,10 @@ for w in wordList_1:
         wordList_2.append(word)
 
 wordList_2 = list(set(wordList_2)) # 중복되는 단어를 제거
+wordList_2.sort() # 리스트 내부 단어들 '가나다' 순으로 정리
 print(wordList_2) # debug_2 :: 리스트 저장 확인 용도
+
+f = open("wordList.txt", 'w') # w 명령어 이용 (.txt 파일에 저장 용도)
+for word in wordList_2:
+    f.write(word + ' ') # write 명령어로 내용 작성
+f.close() # close 명령어로 파일 닫기

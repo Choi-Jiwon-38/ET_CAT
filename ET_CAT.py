@@ -11,7 +11,9 @@ wordList_1 = driver.find_elements_by_xpath(xpath)
 wordList_2 = [] # wordList_1의 요소들을 텍스트로 변환한 뒤 저장할 빈 리스트 생성
 for w in wordList_1:
     word = w.text # wordList_1 의 요소를 변환
-    # print(word) # debug_1 :: 텍스트 형태 변환 확인 용도
-    wordList_2.append(word)
+    print(word) # debug_1 :: 텍스트 형태 변환 확인 용도
+    if len(word) != 1: # 글자 1개로 이루어진 단어는 저장 X <- 끝말잇기에서 사용하지 않음
+        wordList_2.append(word)
 
+wordList_2 = list(set(wordList_2)) # 중복되는 단어를 제거
 print(wordList_2) # debug_2 :: 리스트 저장 확인 용도

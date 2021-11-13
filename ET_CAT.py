@@ -32,3 +32,20 @@ def loadWordList():
     wordData = f.read()
     wdList = wordData.split(' ')
     wdList.pop(-1) # txt 파일 저장에 공백을 넣어두었기 때문에, 마지막 공백은 지워줌
+
+def checkingDictionary(playerWord):
+    driver = webdriver.Chrome('C:/Download/chromedriver.exe')
+    url = "https://ko.dict.naver.com/#/main"
+    
+    xpath2 = '//div[@class="component_keyword has-saving-function"]'
+    xpath3 = '//strong[@class="highlight"]'
+
+    checkingWord = playerWord
+    dictionaryWord = driver.find_element_by_xpath(xpath2+xpath3).text
+
+    if checkingWord == dictionaryWord:
+        print("사전에 존재하는 단어입니다.")
+        return True
+    else:
+        print("사전에 존재하지 않는 단어입니다.")
+        return False

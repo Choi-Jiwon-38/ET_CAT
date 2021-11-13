@@ -2,8 +2,9 @@ from selenium import webdriver
 
 
 wl = "wordList.txt"
+wdList = []
 
-def updateWordList(wl):
+def updateWordList():
     driver = webdriver.Chrome('C:/Download/chromedriver.exe')
     url = "https://ko.wiktionary.org/wiki/%EB%B6%80%EB%A1%9D:%EC%9E%90%EC%A3%BC_%EC%93%B0%EC%9D%B4%EB%8A%94_%ED%95%9C%EA%B5%AD%EC%96%B4_%EB%82%B1%EB%A7%90_5800"
     driver.get(url)
@@ -25,3 +26,9 @@ def updateWordList(wl):
     for word in wordList_2:
         f.write(word + ' ')  # write 명령어로 내용 작성
     f.close()  # close 명령어로 파일 닫기
+
+def loadWordList():
+    f = open(wl, 'r')
+    wordData = f.read()
+    wdList = wordData.split(' ')
+    wdList.pop(-1) # txt 파일 저장에 공백을 넣어두었기 때문에, 마지막 공백은 지워줌

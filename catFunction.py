@@ -58,21 +58,24 @@ def checkingDictionary(voca):
     except Exception:
         return "x"
 
-def end_talk(word):
-    if checkingDictionary(word) == "o": # 플레이어가 입력한 단어가 사전에 존재하는 단어인 경우
-        loadedWordList = loadWordList() # wordList.txt에서 단어 목록들을 불러옴
-        temp_word_list = [] 
-        for i in loadedWordList:
-            if i[0] == word[-1]: # 단어 목록 중에서 플레이어의 끝말을 이을 수 있는 단어만 새 리스트에 추가
-                temp_word_list.append(i)
-        if len(temp_word_list) == 0: # 플레이어의 끝말을 이을 수 있는 단어가 0개인 경우 (리스트 요소가 0개인 경우)
-            return "으.. 모르겠다... 나의 패배야...!"
-        else: # 리스트 내부에서 랜덤으로 1개의 단어를 출력
-            r_seed = random.randrange(0, len(temp_word_list))
-            word = temp_word_list[r_seed] 
-            return word
-    else: # 사전에 없는 경우
-        return "없는 단어를 입력했네? 아쉽겠지만 나의 승리야!"
+def end_talk(word, prev_word):
+    if word[0] == prev_word[-1]:
+        if checkingDictionary(word) == "o": # 플레이어가 입력한 단어가 사전에 존재하는 단어인 경우
+            loadedWordList = loadWordList() # wordList.txt에서 단어 목록들을 불러옴
+            temp_word_list = [] 
+            for i in loadedWordList:
+                if i[0] == word[-1]: # 단어 목록 중에서 플레이어의 끝말을 이을 수 있는 단어만 새 리스트에 추가
+                    temp_word_list.append(i)
+            if len(temp_word_list) == 0: # 플레이어의 끝말을 이을 수 있는 단어가 0개인 경우 (리스트 요소가 0개인 경우)
+                return "으.. 모르겠다... 나의 패배야...!"
+            else: # 리스트 내부에서 랜덤으로 1개의 단어를 출력
+                r_seed = random.randrange(0, len(temp_word_list))
+                word = temp_word_list[r_seed]
+                return word
+        else: # 사전에 없는 경우
+            return "없는 단어를 입력했네? 아쉽겠지만 나의 승리야!"
+    else:
+        return "너 끝말을 잇는다는 거가 뭔지 몰라? 나의 승리야!"
 
 def game_start_setting():
     wordList = loadWordList()

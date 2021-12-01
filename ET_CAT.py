@@ -118,6 +118,7 @@ class Ui_MainWindow(object):
                 self.displaying_cat_image("defeated")
 
             self.screenEndTalk.append("고양이: " + screenWord)
+        self.plainTextEdit.setPlainText("")
 
 
     def update_wordList(self):

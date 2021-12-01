@@ -1,5 +1,5 @@
 from selenium import webdriver
-
+import random
 
 wl = "wordList.txt"
 wdList = []
@@ -17,7 +17,10 @@ def updateWordList():
     for w in wordList_1:
         word = w.text  # wordList_1 의 요소를 변환
         if len(word) != 1:  # 글자 1개로 이루어진 단어는 저장 X <- 끝말잇기에서 사용하지 않음
-            wordList_2.append(word)
+            if word[-1] == "다": # ~다 와 같은 동사는 저장하지 않음
+                pass
+            else:
+                wordList_2.append(word)
 
     wordList_2 = list(set(wordList_2))  # 중복되는 단어를 제거
     wordList_2.sort()  # 리스트 내부 단어들 '가나다' 순으로 정리
@@ -31,21 +34,48 @@ def loadWordList():
     f = open(wl, 'r')
     wordData = f.read()
     wdList = wordData.split(' ')
-    wdList.pop(-1) # txt 파일 저장에 공백을 넣어두었기 때문에, 마지막 공백은 지워줌
+    del wdList[-1] # txt 파일 저장에 공백을 넣어두었기 때문에, 마지막 공백은 지워줌
+    print(wdList)
+    return wdList
 
-def checkingDictionary(playerWord):
+
+def checkingDictionary(voca):
     driver = webdriver.Chrome('C:/Download/chromedriver.exe')
-    url = "https://ko.dict.naver.com/#/main"
-    
+    url = 'https://ko.dict.naver.com/#/main'
+    driver.get(url)
+    driver.implicitly_wait(10)
+    xpath = '//input[@id="ac_input"]'
+    driver.find_element_by_xpath(xpath).send_keys(voca+'\n')
+    driver.implicitly_wait(10)
     xpath2 = '//div[@class="component_keyword has-saving-function"]'
     xpath3 = '//strong[@class="highlight"]'
+    try:
+        temp_voca = driver.find_element_by_xpath(xpath2+xpath3).text
+        if voca == temp_voca:
+            return "o"
+        else :
+            return "x"
+    except Exception:
+        return "x"
 
-    checkingWord = playerWord
-    dictionaryWord = driver.find_element_by_xpath(xpath2+xpath3).text
+def end_talk(word):
+    if checkingDictionary(word) == "o": # 플레이어가 입력한 단어가 사전에 존재하는 단어인 경우
+        loadedWordList = loadWordList() # wordList.txt에서 단어 목록들을 불러옴
+        temp_word_list = [] 
+        for i in loadedWordList:
+            if i[0] == word[-1]: # 단어 목록 중에서 플레이어의 끝말을 이을 수 있는 단어만 새 리스트에 추가
+                temp_word_list.append(i)
+        if len(temp_word_list) == 0: # 플레이어의 끝말을 이을 수 있는 단어가 0개인 경우 (리스트 요소가 0개인 경우)
+            return "으.. 모르겠다... 나의 패배야...!"
+        else: # 리스트 내부에서 랜덤으로 1개의 단어를 출력
+            r_seed = random.randrange(0, len(temp_word_list))
+            word = temp_word_list[r_seed] 
+            return word
+    else: # 사전에 없는 경우
+        return "없는 단어를 입력했네? 아쉽겠지만 나의 승리야!"
 
-    if checkingWord == dictionaryWord:
-        print("사전에 존재하는 단어입니다.")
-        return True
-    else:
-        print("사전에 존재하지 않는 단어입니다.")
-        return False
+def game_start_setting():
+    wordList = loadWordList()
+    r_seed = random.randrange(0, len(wordList))
+    word = wordList[r_seed]
+    return word

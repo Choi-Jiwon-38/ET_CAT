@@ -11,10 +11,11 @@
 # ================ QtDesigner로 GUI를 작성하였습니다 ============================
 from PyQt5 import QtCore, QtGui, QtWidgets
 from catFunction import checkingDictionary, end_talk, game_start_setting, loadWordList, updateWordList
+from PyQt5.QtGui import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
+        MainWindow.setObjectName("ET CAT_끝말잇기 하는 고양이")
         MainWindow.resize(371, 555)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -41,7 +42,7 @@ class Ui_MainWindow(object):
         self.screenEndTalk.setGeometry(QtCore.QRect(20, 310, 331, 121))
         self.screenEndTalk.setObjectName("screenEndTalk")
         
-        self.screenCat = QtWidgets.QGraphicsView(self.centralwidget)
+        self.screenCat = QtWidgets.QLabel(self.centralwidget)
         self.screenCat.setGeometry(QtCore.QRect(20, 100, 331, 192))
         self.screenCat.setObjectName("screenCat")
         
@@ -84,9 +85,11 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.displaying_cat_image("reset")
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "끝말잇기 하는 고양이"))
         self.labelEnglish.setText(_translate("MainWindow", "ET CAT"))
         self.labelKorean.setText(_translate("MainWindow", "고양이와 함께 하는 끝말잇기"))
         self.screenEndTalk.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -101,12 +104,19 @@ class Ui_MainWindow(object):
     
     def entering_player_word(self):
         print('InputButton Clicked!') # debug1
+        self.displaying_cat_image("reset")
         word = self.plainTextEdit.toPlainText()
+        prev_word = self.screenEndTalk.toPlainText()
         self.screenEndTalk.append("플레이어: " + word)
         if word == "시작!":
             self.first_start_game()
         else:
-            screenWord = end_talk(word)
+            screenWord = end_talk(word, prev_word)
+            if screenWord == "으.. 모르겠다... 나의 패배야...!":
+                self.displaying_cat_image("win")
+            elif screenWord == "없는 단어를 입력했네? 아쉽겠지만 나의 승리야!" or screenWord == "너 끝말을 잇는다는 거가 뭔지 몰라? 나의 승리야!":
+                self.displaying_cat_image("defeated")
+
             self.screenEndTalk.append("고양이: " + screenWord)
 
 
@@ -115,9 +125,17 @@ class Ui_MainWindow(object):
         updateWordList()
         
 
-    def displaying_cat_image(self):
-        pass
-    
+    def displaying_cat_image(self, status):
+        if status == "reset":
+            reference = 'mainScreen.jpg'
+        elif status == "win":
+            reference = 'mainScreen_win.jpg'
+        else:
+            reference = 'mainScreen_defeated.jpg'
+        self.pm = QPixmap(reference)
+        self.pm.scaled(30,30)
+        self.screenCat.setPixmap(self.pm)
+
     def first_start_game(self):
         self.screenEndTalk.append("고양이: 그러면 나 먼저 시작할게!")
         word = game_start_setting()

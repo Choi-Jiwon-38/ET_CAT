@@ -28,6 +28,9 @@ ET CAT은 기본적으로 단어 사전 속 단어들을 크롤링하여 가지�
 -  요구사항 명세서 작성 (O)
 - 소프트웨어 구조 설계서 작성 (O)
 <br><br>
-![1](https://user-images.githubusercontent.com/81795729/144211621-3b4e29ef-24e3-46de-a7b9-1986bfe30433.png)
+
+(5) 프로그램 동작 사진
+<br>
+![1](https://user-images.githubusercontent.com/81795729/144211621-3b4e29ef-24e3-46de-a7b9-1986bfe30433.png)___
 ![2](https://user-images.githubusercontent.com/81795729/144211644-bbf3dd52-052b-445e-bfa3-89c9cf0f346d.png)
 
